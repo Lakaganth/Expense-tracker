@@ -90,8 +90,6 @@ class BuildNewTripRow extends StatelessWidget {
               ),
             ),
             autocorrect: false,
-            // onEditingComplete: (),
-
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
           ),

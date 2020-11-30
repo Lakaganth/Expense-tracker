@@ -1,11 +1,14 @@
 import 'package:fleming_expense_tracker/controllers/trip_controller.dart';
 import 'package:fleming_expense_tracker/model/trip_model.dart';
+import 'package:fleming_expense_tracker/screens/3.dashboard/user_trips.dart';
 import 'package:fleming_expense_tracker/screens/6.expense_dashboard/expense_dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class UserTrips extends StatelessWidget {
+class AdminTrips extends StatelessWidget {
+  const AdminTrips({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetX<TripController>(
@@ -14,16 +17,15 @@ class UserTrips extends StatelessWidget {
         if (tripController != null && tripController.trips != null) {
           return Expanded(
             child: ListView.builder(
-              primary: true,
-              itemCount: tripController.trips.length,
+              itemCount: tripController.adminTrips.length,
               itemBuilder: (_, index) {
                 return GestureDetector(
-                    onTap: () async {
+                    onTap: () {
                       Get.to(ExpenseDashboardScreen(
                           tripId: tripController.trips[index].tripId,
                           trip: tripController.trips[index]));
                     },
-                    child: TripCard(trip: tripController.trips[index]));
+                    child: TripCard(trip: tripController.adminTrips[index]));
               },
             ),
           );

@@ -8,13 +8,26 @@ class TripController extends GetxController {
 
   // RxList<TripModel> adminTrips = [].obs;
   Rx<List<TripModel>> userTrips = Rx<List<TripModel>>();
+  Rx<List<TripModel>> adminUserTrips = Rx<List<TripModel>>();
+
+  RxString currentTripId = "".obs;
+  Rx<TripModel> currentTrip = Rx<TripModel>();
 
   List<TripModel> get trips => userTrips.value;
+  List<TripModel> get adminTrips => adminUserTrips.value;
+
+  setcurrentTripId(val) {
+    currentTripId.value = val;
+    // print(currentTripId.value);
+  }
+
+  setcurrentTrip(val) => currentTrip.value = val;
 
   @override
   void onInit() {
     String uid = Get.find<AuthController>().firestoreUser.value.uid;
     getUserAllTrips(uid);
+    getAdminAllTrips(uid);
   }
 
   void getUserAllTrips(String uid) {
@@ -25,6 +38,24 @@ class TripController extends GetxController {
     return _db
         .collection("trip")
         .where("teamMembers", arrayContains: uid)
+        .snapshots()
+        .map((QuerySnapshot trip) {
+      List<TripModel> userTripFromJson = List();
+      trip.docs.forEach((element) {
+        userTripFromJson.add(TripModel.fromMap(element.id, element));
+      });
+      return userTripFromJson;
+    });
+  }
+
+  void getAdminAllTrips(String uid) {
+    adminUserTrips.bindStream(adminTripsStream(uid));
+  }
+
+  Stream<List<TripModel>> adminTripsStream(String uid) {
+    return _db
+        .collection("trip")
+        .where("tripAdminId", isEqualTo: uid)
         .snapshots()
         .map((QuerySnapshot trip) {
       List<TripModel> userTripFromJson = List();
