@@ -22,8 +22,8 @@ class AdminTrips extends StatelessWidget {
                 return GestureDetector(
                     onTap: () {
                       Get.to(ExpenseDashboardScreen(
-                          tripId: tripController.trips[index].tripId,
-                          trip: tripController.trips[index]));
+                          tripId: tripController.adminTrips[index].tripId,
+                          trip: tripController.adminTrips[index]));
                     },
                     child: TripCard(trip: tripController.adminTrips[index]));
               },

@@ -7,20 +7,31 @@ class DisplayExpenseController extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Rx<List<ExpenseModel>> expensesList = Rx<List<ExpenseModel>>();
+  RxDouble totalTripAmount = 0.0.obs;
 
   List<ExpenseModel> get expenses => expensesList.value;
 
-  // @override
-  // void onInit() {
-  //   String tripId = Get.find<TripController>().currentTripId.value;
-  //   getTripExpenses(tripId);
-  // }
+  @override
+  void onClose() {
+    totalTripAmount.value = 0.0;
+  }
 
-  void getTripExpenses(tripId) {
-    print("Hello");
-    // String id = Get.find<TripController>().currentTripId.value;
-
+  void getTripExpenses(tripId) async {
     expensesList.bindStream(expenseStream(tripId));
+
+    // getAllExpenses();
+    print(totalTripAmount.value);
+  }
+
+  void getAllExpenses() {
+    if (expensesList != null) {
+      expenses.forEach((expense) {
+        totalTripAmount.value = totalTripAmount.value + expense.expenseAmount;
+      });
+    } else {
+      print(totalTripAmount.value);
+      return null;
+    }
   }
 
   Stream<List<ExpenseModel>> expenseStream(String tripId) {
@@ -28,11 +39,16 @@ class DisplayExpenseController extends GetxController {
         .collection("trip")
         .doc(tripId)
         .collection("expense")
+        .orderBy("date", descending: true)
         .snapshots()
         .map((QuerySnapshot expense) {
       List<ExpenseModel> expenseFromJson = List();
       expense.docs.forEach((element) {
         expenseFromJson.add(ExpenseModel.fromMap(tripId, element));
+      });
+
+      expenseFromJson.forEach((exp) {
+        totalTripAmount.value = totalTripAmount.value + exp.expenseAmount;
       });
       return expenseFromJson;
     });

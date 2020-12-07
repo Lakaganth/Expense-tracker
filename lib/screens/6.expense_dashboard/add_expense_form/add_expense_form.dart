@@ -39,44 +39,54 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
     return Scaffold(
       backgroundColor: Color(0xFFFD4228),
       body: SingleChildScrollView(
-        // primary: true,
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Column(
-
-              // primary: true,
-
+          child: Column(children: <Widget>[
+            SizedBox(
+              height: 30.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  height: 30.0,
-                ),
                 Text(
                   "Add Expense",
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.roboto(
                     fontSize: 40.0,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                NameField(expense: expense),
-                SizedBox(
-                  height: 40.0,
-                ),
-                AmountField(expense: expense),
-                DateSelector(expense: expense),
-                ExpenseSelector(expense: expense),
-                BusinessExpenseSelector(
-                    expense: expense, businessExpenses: businessExpenses),
-                MileageTextField(expense: expense),
-                NotesField(expense: expense),
-                BillUpload(expense: expense),
-                CustomRaisedButtton(
-                  onPressed: () => expense.submitExpense(widget.tripId),
-                  buttonText: "Submit",
-                  buttonColor: Colors.white,
-                  buttonTextColor: Color(0xFFFD4228),
+                IconButton(
+                  icon: Icon(
+                    Icons.cancel,
+                    size: 35.0,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => Get.back(),
                 )
-              ]),
+              ],
+            ),
+            NameField(expense: expense),
+            SizedBox(
+              height: 40.0,
+            ),
+            AmountField(expense: expense),
+            DateSelector(expense: expense),
+            ExpenseSelector(expense: expense),
+            BusinessExpenseSelector(
+                expense: expense, businessExpenses: businessExpenses),
+            MileageTextField(expense: expense),
+            NotesField(expense: expense),
+            BillUpload(expense: expense),
+            CustomRaisedButtton(
+              onPressed: () => expense.submitExpense(widget.tripId),
+              buttonText: "Submit",
+              buttonColor: Colors.white,
+              buttonTextColor: Color(0xFFFD4228),
+            )
+          ]),
         ),
       ),
     );

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as Im;
+import 'package:uuid/uuid.dart';
 
 class ExpenseController extends GetxController {
   RxString name = "".obs;
@@ -20,6 +21,8 @@ class ExpenseController extends GetxController {
   RxBool isExpenseUploading = false.obs;
   Rx<ExpenseType> expenseType = ExpenseType.business.obs;
   Rx<BusinessType> businessExpenseType = BusinessType.accomodation.obs;
+
+  var uuid = Uuid();
 
   final StorageReference storageReference = FirebaseStorage.instance.ref();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -69,7 +72,6 @@ class ExpenseController extends GetxController {
 
   submitExpense(String tripId) async {
     setIsExpenseUploading(true);
-    print(expenseType.value);
 
     ExpenseModel newExpense = ExpenseModel(
       tripId: tripId,
@@ -98,7 +100,8 @@ class ExpenseController extends GetxController {
         .collection("expense")
         .add(newExpense.toJson());
 
-    print(expenseId);
+    setIsExpenseUploading(false);
+    Get.back();
   }
 
   void handleTakePhoto() async {
@@ -146,7 +149,7 @@ class ExpenseController extends GetxController {
   uploadImage(imageFile) async {
     setIsLoading(true);
     StorageUploadTask uploadTask =
-        storageReference.child("bill_123").putFile(imageFile);
+        storageReference.child(uuid.v4()).putFile(imageFile);
     StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
     String downloadUrl = await storageSnap.ref.getDownloadURL();
     setImageDownloadUrl(downloadUrl);

@@ -14,7 +14,6 @@ class UserTrips extends StatelessWidget {
         if (tripController != null && tripController.trips != null) {
           return Expanded(
             child: ListView.builder(
-              primary: true,
               itemCount: tripController.trips.length,
               itemBuilder: (_, index) {
                 return GestureDetector(

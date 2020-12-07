@@ -2,7 +2,8 @@ import 'package:fleming_expense_tracker/controllers/display_expense_controller.d
 import 'package:fleming_expense_tracker/controllers/expense_controller.dart';
 import 'package:fleming_expense_tracker/controllers/trip_controller.dart';
 import 'package:fleming_expense_tracker/model/trip_model.dart';
-import 'package:fleming_expense_tracker/screens/6.expense_dashboard/add_expense_form/add_expense_form.dart';
+import 'package:fleming_expense_tracker/screens/6.expense_dashboard/expense_components/expense_panel.dart';
+import 'package:fleming_expense_tracker/screens/7.chat_screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,12 +16,34 @@ class ExpenseDashboardScreen extends StatelessWidget {
   ExpenseDashboardScreen({@required this.tripId, @required this.trip});
 
   final TripController tripController = Get.put(TripController());
-  final DisplayExpenseController expenseController =
-      Get.put(DisplayExpenseController());
+  // final DisplayExpenseController expenseController =
+  //     Get.put(DisplayExpenseController());
 
   @override
   Widget build(BuildContext context) {
+    tripController.setcurrentTrip(trip);
+    tripController.setcurrentTripId(tripId);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white54,
+        elevation: 0.0,
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Color(0xFFFF0044),
+              size: 25.0,
+            ),
+            onPressed: () => Get.back()),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(
+                Icons.chat,
+                color: Color(0xFFFF0044),
+                size: 25.0,
+              ),
+              onPressed: () => Get.to(ChatScreen()))
+        ],
+      ),
       body: SafeArea(
         child: SlidingUpPanel(
           maxHeight: Get.height * .80,
@@ -109,105 +132,6 @@ class ExpenseBody extends StatelessWidget {
                   SizedBox(height: 20.0),
                 ],
               ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class ExpensePanel extends StatefulWidget {
-  const ExpensePanel({
-    Key key,
-    @required this.tripId,
-    @required this.trip,
-  }) : super(key: key);
-
-  final String tripId;
-  final TripModel trip;
-
-  @override
-  _ExpensePanelState createState() => _ExpensePanelState();
-}
-
-class _ExpensePanelState extends State<ExpensePanel> {
-  final DisplayExpenseController expenseController =
-      Get.put(DisplayExpenseController());
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    expenseController.getTripExpenses(widget.tripId);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 10.0,
-            ),
-            Image.asset('assets/images/panel_slider.png'),
-            SizedBox(
-              height: 10.0,
-            ),
-            AddExpenseButton(tripId: widget.tripId),
-            Obx(
-              () {
-                // displayExpense.getTripExpenses(tripId);
-                if (expenseController != null &&
-                    expenseController.expenses != null) {
-                  print(expenseController.expenses.length);
-                  return Expanded(
-                      child: ListView.builder(
-                          itemCount: expenseController.expenses.length,
-                          itemBuilder: (_, index) {
-                            return Text(expenseController
-                                .expenses[index].expenseType
-                                .toString());
-                          }));
-                } else {
-                  return CircularProgressIndicator();
-                }
-              },
-            )
-          ],
-        ));
-  }
-}
-
-class AddExpenseButton extends StatelessWidget {
-  const AddExpenseButton({
-    Key key,
-    @required this.tripId,
-  }) : super(key: key);
-
-  final String tripId;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text(""),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.0),
-          child: Container(
-            width: 70.0,
-            height: 70.0,
-            decoration: BoxDecoration(
-              color: Color(0xFFFD4228),
-              shape: BoxShape.circle,
-            ),
-            child: IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () => Get.to(AddExpenseForm(tripId: tripId)),
-              color: Colors.white,
-              iconSize: 55.0,
             ),
           ),
         )
