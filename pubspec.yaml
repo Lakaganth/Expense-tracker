@@ -43,6 +43,7 @@ dependencies:
   regexpattern: ^1.0.0
   dash_chat: ^1.1.15
   uuid: ^2.2.2
+  fl_chart: ^0.12.2
 
   flutter:
     sdk: flutter

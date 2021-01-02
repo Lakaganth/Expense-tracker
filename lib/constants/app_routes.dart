@@ -2,6 +2,7 @@ import 'package:fleming_expense_tracker/screens/1.splash_screens/onboarding_scre
 import 'package:fleming_expense_tracker/screens/2.authenitication/login_screen.dart';
 import 'package:fleming_expense_tracker/screens/2.authenitication/register_screen.dart';
 import 'package:fleming_expense_tracker/screens/3.dashboard/dashboard_screen.dart';
+import 'package:fleming_expense_tracker/screens/3.dashboard/dashboard_tab_screen.dart';
 import 'package:fleming_expense_tracker/utilities/root.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +13,7 @@ class AppRoutes {
     GetPage(name: '/onboarding', page: () => OnboardingScreen()),
     GetPage(name: '/signin', page: () => LoginScreen()),
     GetPage(name: '/signup', page: () => RegisterScreen()),
-    GetPage(name: '/home', page: () => DashboardScreen()),
+    GetPage(name: '/home', page: () => DashboardTabScreen()),
     // GetPage(name: '/settings', page: () => SettingsUI()),
     // GetPage(name: '/reset-password', page: () => ResetPasswordUI()),
     // GetPage(name: '/update-profile', page: () => UpdateProfileUI()),

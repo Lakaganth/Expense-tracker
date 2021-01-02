@@ -15,19 +15,17 @@ class AdminTrips extends StatelessWidget {
       init: Get.put(TripController()),
       builder: (TripController tripController) {
         if (tripController != null && tripController.trips != null) {
-          return Expanded(
-            child: ListView.builder(
-              itemCount: tripController.adminTrips.length,
-              itemBuilder: (_, index) {
-                return GestureDetector(
-                    onTap: () {
-                      Get.to(ExpenseDashboardScreen(
-                          tripId: tripController.adminTrips[index].tripId,
-                          trip: tripController.adminTrips[index]));
-                    },
-                    child: TripCard(trip: tripController.adminTrips[index]));
-              },
-            ),
+          return ListView.builder(
+            itemCount: tripController.adminTrips.length,
+            itemBuilder: (_, index) {
+              return GestureDetector(
+                  onTap: () {
+                    Get.to(ExpenseDashboardScreen(
+                        tripId: tripController.adminTrips[index].tripId,
+                        trip: tripController.adminTrips[index]));
+                  },
+                  child: TripCard(trip: tripController.adminTrips[index]));
+            },
           );
         } else {
           return CircularProgressIndicator();

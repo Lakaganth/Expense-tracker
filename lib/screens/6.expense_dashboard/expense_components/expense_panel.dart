@@ -34,13 +34,12 @@ class _ExpensePanelState extends State<ExpensePanel> {
     expenseController.getTripExpenses(widget.tripId);
   }
 
-  double totalExpenses;
+  double totalExpenses = 0.0;
+  TripModel get trip => widget.trip;
 
   void getTotalSpending(List<ExpenseModel> expenses) {
-    totalExpenses = 0.0;
-
     expenses.forEach((exp) {
-      totalExpenses = exp.expenseAmount + totalExpenses;
+      totalExpenses = totalExpenses + exp.expenseAmount;
     });
   }
 
@@ -63,13 +62,32 @@ class _ExpensePanelState extends State<ExpensePanel> {
               SizedBox(
                 height: 10.0,
               ),
-              AddExpenseButton(
-                tripId: widget.tripId,
-                totalExpenseAmount: expenseController.totalTripAmount.value,
-                homeCurrency: widget.trip.homeCurrency,
-                destCurrency: widget.trip.destinationCurrency,
-                rate: widget.trip.conversionRate,
-              ),
+              Obx(() {
+                if (expenseController != null &&
+                    expenseController.expenses != null) {
+                  getTotalSpending(expenseController.expenses);
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Total Spending: $totalExpenses ${trip.destinationCurrency} ",
+                        style: GoogleFonts.roboto(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      AddExpenseButton(
+                        tripId: widget.tripId,
+                      ),
+                    ],
+                  );
+                } else {
+                  return CircularProgressIndicator();
+                }
+              }),
               Obx(
                 () {
                   if (expenseController != null &&
@@ -78,7 +96,6 @@ class _ExpensePanelState extends State<ExpensePanel> {
                         child: ListView.builder(
                             itemCount: expenseController.expenses.length,
                             itemBuilder: (_, index) {
-                              getTotalSpending(expenseController.expenses);
                               return ExpenseRow(
                                 expenseController: expenseController,
                                 expense: expenseController.expenses[index],

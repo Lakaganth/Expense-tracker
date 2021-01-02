@@ -2,6 +2,7 @@ import 'package:fleming_expense_tracker/controllers/display_expense_controller.d
 import 'package:fleming_expense_tracker/controllers/expense_controller.dart';
 import 'package:fleming_expense_tracker/controllers/trip_controller.dart';
 import 'package:fleming_expense_tracker/model/trip_model.dart';
+import 'package:fleming_expense_tracker/screens/6.expense_dashboard/expense_components/bar_chart.dart';
 import 'package:fleming_expense_tracker/screens/6.expense_dashboard/expense_components/expense_panel.dart';
 import 'package:fleming_expense_tracker/screens/7.chat_screen/chat_screen.dart';
 import 'package:flutter/material.dart';
@@ -134,7 +135,10 @@ class ExpenseBody extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
+        BarChartExpense(
+          tripId: tripId,
+        ),
       ],
     );
   }

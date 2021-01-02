@@ -18,9 +18,6 @@ class DisplayExpenseController extends GetxController {
 
   void getTripExpenses(tripId) async {
     expensesList.bindStream(expenseStream(tripId));
-
-    // getAllExpenses();
-    print(totalTripAmount.value);
   }
 
   void getAllExpenses() {

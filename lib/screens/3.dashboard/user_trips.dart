@@ -12,19 +12,17 @@ class UserTrips extends StatelessWidget {
       init: Get.put(TripController()),
       builder: (TripController tripController) {
         if (tripController != null && tripController.trips != null) {
-          return Expanded(
-            child: ListView.builder(
-              itemCount: tripController.trips.length,
-              itemBuilder: (_, index) {
-                return GestureDetector(
-                    onTap: () async {
-                      Get.to(ExpenseDashboardScreen(
-                          tripId: tripController.trips[index].tripId,
-                          trip: tripController.trips[index]));
-                    },
-                    child: TripCard(trip: tripController.trips[index]));
-              },
-            ),
+          return ListView.builder(
+            itemCount: tripController.trips.length,
+            itemBuilder: (_, index) {
+              return GestureDetector(
+                  onTap: () async {
+                    Get.to(ExpenseDashboardScreen(
+                        tripId: tripController.trips[index].tripId,
+                        trip: tripController.trips[index]));
+                  },
+                  child: TripCard(trip: tripController.trips[index]));
+            },
           );
         } else {
           return CircularProgressIndicator();
