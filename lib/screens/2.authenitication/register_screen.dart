@@ -1,7 +1,6 @@
 import 'package:fleming_expense_tracker/constants/constants.dart';
 import 'package:fleming_expense_tracker/controllers/auth_controller.dart';
 import 'package:fleming_expense_tracker/screens/2.authenitication/login_screen.dart';
-import 'package:fleming_expense_tracker/screens/3.dashboard/dashboard_screen.dart';
 import 'package:fleming_expense_tracker/utilities/fade_animation.dart';
 import 'package:fleming_expense_tracker/widgets/custom_raised_button.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fleming_expense_tracker/controllers/auth_controller.dart';
 import 'package:fleming_expense_tracker/controllers/currency_controller.dart';
 import 'package:fleming_expense_tracker/model/trip_model.dart';

@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fleming_expense_tracker/controllers/trip_controller.dart';
+import 'package:csv/csv.dart';
+
 import 'package:fleming_expense_tracker/model/expense_model.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DisplayExpenseController extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -18,6 +22,7 @@ class DisplayExpenseController extends GetxController {
 
   void getTripExpenses(tripId) async {
     expensesList.bindStream(expenseStream(tripId));
+    getCsv(tripId);
   }
 
   void getAllExpenses() {
@@ -49,5 +54,51 @@ class DisplayExpenseController extends GetxController {
       });
       return expenseFromJson;
     });
+  }
+
+//Filepath
+
+  String filePath;
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationSupportDirectory();
+    return directory.absolute.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    filePath = '$path/data.csv';
+    return File('$path/data.csv').create();
+  }
+
+  getCsv(String tripId) async {
+    List<List<dynamic>> rows = List<List<dynamic>>();
+
+    QuerySnapshot expenseData = await _db
+        .collection("trip")
+        .doc(tripId)
+        .collection("expense")
+        .orderBy("date")
+        .get();
+
+    rows.add(["Date", "Expense", "Amount", "Type", "Business Type", "Notes"]);
+    if (!expenseData.isNull) {
+      List<dynamic> row = List<dynamic>();
+      expenseData.docs.forEach((data) => {
+            row.add(DateTime.parse(data["date"].toDate().toString())),
+            row.add(data["name"]),
+            row.add(data["expenseAmount"]),
+            row.add(data["expenseType"]),
+            row.add(data["businessType"]),
+            row.add(data["notes"]),
+          });
+      rows.add(row);
+    }
+
+    File f = await _localFile;
+    String csv = const ListToCsvConverter().convert(rows);
+    f.writeAsString(csv);
+    print(f);
+    // filePath = f.uri.path;
   }
 }

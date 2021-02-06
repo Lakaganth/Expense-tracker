@@ -1,13 +1,11 @@
-import 'dart:math';
-
 import 'package:fleming_expense_tracker/controllers/display_expense_controller.dart';
-import 'package:fleming_expense_tracker/controllers/expense_controller.dart';
 import 'package:fleming_expense_tracker/model/expense_model.dart';
 import 'package:fleming_expense_tracker/model/trip_model.dart';
 import 'package:fleming_expense_tracker/screens/6.expense_dashboard/expense_components/add_expense_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class ExpensePanel extends StatefulWidget {
   const ExpensePanel({
@@ -29,7 +27,6 @@ class _ExpensePanelState extends State<ExpensePanel> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     expenseController.getTripExpenses(widget.tripId);
   }
@@ -137,6 +134,8 @@ class _ExpenseRowState extends State<ExpenseRow> {
   ExpenseModel get expense => widget.expense;
   TripModel get trip => widget.trip;
 
+  final dateFormated = new DateFormat('yyyy-MM-dd hh:mm a');
+
   selectExpensetype() {
     if (expense.expenseType == "ExpenseType.business") {
       switch (expense.businessType) {
@@ -186,7 +185,7 @@ class _ExpenseRowState extends State<ExpenseRow> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(expense.date.toString(),
+          Text(dateFormated.format(expense.date),
               style: GoogleFonts.roboto(
                 color: Color(0XFfEEE6EE),
                 fontSize: 18.0,

@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:fleming_expense_tracker/controllers/trip_controller.dart';
 import 'package:fleming_expense_tracker/controllers/chat_controller.dart';
@@ -18,14 +15,6 @@ class _ChatScreenState extends State<ChatScreen> {
   ChatController chat = Get.put(ChatController());
 
   var i = 0;
-
-  // void systemMessage() {
-  //   Timer(Duration(milliseconds: 300), () {
-  //     if(i<6){
-
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
               shouldShowLoadEarlier: false,
             );
           } else {
-            Center(
+            return Center(
               child: Text("Hello"),
             );
           }

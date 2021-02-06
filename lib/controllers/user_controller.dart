@@ -1,5 +1,4 @@
 import 'package:fleming_expense_tracker/model/user_model.dart';
-import 'package:fleming_expense_tracker/services/user_database.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {

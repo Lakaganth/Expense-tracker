@@ -1,6 +1,5 @@
 import 'package:fleming_expense_tracker/controllers/trip_controller.dart';
 import 'package:fleming_expense_tracker/model/trip_model.dart';
-import 'package:fleming_expense_tracker/screens/3.dashboard/user_trips.dart';
 import 'package:fleming_expense_tracker/screens/6.expense_dashboard/expense_dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
