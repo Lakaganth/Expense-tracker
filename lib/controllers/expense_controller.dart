@@ -111,11 +111,10 @@ class ExpenseController extends GetxController {
       maxHeight: 675,
       maxWidth: 960,
     );
-    print(tempFile.path);
+
     if (tempFile != null) {
       setFile(File(tempFile.path));
       uploadImage(file.value);
-      print(imageDownloadUrl.value);
     } else {
       print("No Image Selected");
     }

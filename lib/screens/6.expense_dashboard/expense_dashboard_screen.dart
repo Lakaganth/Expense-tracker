@@ -1,3 +1,5 @@
+import 'package:fleming_expense_tracker/controllers/auth_controller.dart';
+import 'package:fleming_expense_tracker/controllers/display_expense_controller.dart';
 import 'package:fleming_expense_tracker/controllers/trip_controller.dart';
 import 'package:fleming_expense_tracker/model/trip_model.dart';
 import 'package:fleming_expense_tracker/screens/6.expense_dashboard/expense_components/bar_chart.dart';
@@ -15,13 +17,16 @@ class ExpenseDashboardScreen extends StatelessWidget {
   ExpenseDashboardScreen({@required this.tripId, @required this.trip});
 
   final TripController tripController = Get.put(TripController());
-  // final DisplayExpenseController expenseController =
-  //     Get.put(DisplayExpenseController());
+  final DisplayExpenseController expenseController =
+      Get.put(DisplayExpenseController());
+  final AuthController authcontroller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
     tripController.setcurrentTrip(trip);
     tripController.setcurrentTripId(tripId);
+    print(authcontroller.firestoreUser.value.uid);
+    print(tripController.currentTrip.value.tripAdminId);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white54,
@@ -34,6 +39,17 @@ class ExpenseDashboardScreen extends StatelessWidget {
             ),
             onPressed: () => Get.back()),
         actions: <Widget>[
+          authcontroller.firestoreUser.value.uid ==
+                  tripController.currentTrip.value.tripAdminId
+              ? IconButton(
+                  icon: Icon(
+                    Icons.file_download,
+                    color: Color(0xFFFF0044),
+                    size: 25.0,
+                  ),
+                  onPressed: () => expenseController.getCsv(tripId),
+                )
+              : Text(""),
           IconButton(
               icon: Icon(
                 Icons.chat,

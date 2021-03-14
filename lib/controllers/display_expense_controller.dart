@@ -6,12 +6,14 @@ import 'package:csv/csv.dart';
 import 'package:fleming_expense_tracker/model/expense_model.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class DisplayExpenseController extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Rx<List<ExpenseModel>> expensesList = Rx<List<ExpenseModel>>();
   RxDouble totalTripAmount = 0.0.obs;
+  String filePath = "";
 
   List<ExpenseModel> get expenses => expensesList.value;
 
@@ -22,7 +24,7 @@ class DisplayExpenseController extends GetxController {
 
   void getTripExpenses(tripId) async {
     expensesList.bindStream(expenseStream(tripId));
-    getCsv(tripId);
+    // getCsv(tripId);
   }
 
   void getAllExpenses() {
@@ -58,8 +60,6 @@ class DisplayExpenseController extends GetxController {
 
 //Filepath
 
-  String filePath;
-
   Future<String> get _localPath async {
     final directory = await getApplicationSupportDirectory();
     return directory.absolute.path;
@@ -67,8 +67,20 @@ class DisplayExpenseController extends GetxController {
 
   Future<File> get _localFile async {
     final path = await _localPath;
-    filePath = '$path/data.csv';
-    return File('$path/data.csv').create();
+    filePath = '$path/expenses.csv';
+    return File('$path/expenses.csv').create();
+  }
+
+  sendMailAndAttachment() async {
+    final Email email = Email(
+      body: 'PFA the csv for the requested Trip',
+      subject: 'Expenses CSV ${DateTime.now().toString()}',
+      recipients: [],
+      isHTML: true,
+      attachmentPaths: [filePath],
+    );
+    // print(email);
+    await FlutterEmailSender.send(email);
   }
 
   getCsv(String tripId) async {
@@ -81,24 +93,36 @@ class DisplayExpenseController extends GetxController {
         .orderBy("date")
         .get();
 
-    rows.add(["Date", "Expense", "Amount", "Type", "Business Type", "Notes"]);
+    rows.add([
+      "Date",
+      "Expense",
+      "Amount",
+      "Type",
+      "Business Type",
+      "Notes",
+      "Bill URL"
+    ]);
     if (!expenseData.isNull) {
-      List<dynamic> row = List<dynamic>();
-      expenseData.docs.forEach((data) => {
-            row.add(DateTime.parse(data["date"].toDate().toString())),
-            row.add(data["name"]),
-            row.add(data["expenseAmount"]),
-            row.add(data["expenseType"]),
-            row.add(data["businessType"]),
-            row.add(data["notes"]),
-          });
-      rows.add(row);
+      for (int i = 0; i < expenseData.docs.length; i++) {
+        List<dynamic> row = List<dynamic>();
+        row.add(
+            DateTime.parse(expenseData.docs[i]["date"].toDate().toString()));
+        row.add(expenseData.docs[i]["name"]);
+        row.add(expenseData.docs[i]["expenseAmount"]);
+        row.add(expenseData.docs[i]["expenseType"]);
+        row.add(expenseData.docs[i]["businessType"]);
+        row.add(expenseData.docs[i]["notes"]);
+        row.add(expenseData.docs[i]["billUrl"]);
+        rows.add(row);
+      }
     }
 
+    print(rows);
     File f = await _localFile;
     String csv = const ListToCsvConverter().convert(rows);
     f.writeAsString(csv);
-    print(f);
+    sendMailAndAttachment();
+    // print(f);
     // filePath = f.uri.path;
   }
 }

@@ -47,6 +47,7 @@ dependencies:
   intl: ^0.16.1
   permission_handler: ^5.1.0+2
   csv: ^4.1.0
+  flutter_email_sender: ^4.0.0
   
 
   flutter:
